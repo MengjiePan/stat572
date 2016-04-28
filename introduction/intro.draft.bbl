@@ -1,0 +1,82 @@
+\begin{thebibliography}{11}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Akram et~al.(2009)Akram, Hyndman, and Ord]{akram2009exponential}
+Muhammad Akram, Rob~J Hyndman, and J~Keith Ord.
+\newblock Exponential smoothing and non-negative data.
+\newblock \emph{Australian \& New Zealand Journal of Statistics}, 51\penalty0
+  (4):\penalty0 415--432, 2009.
+
+\bibitem[De~Livera et~al.(2011)De~Livera, Hyndman, and
+  Snyder]{de2011forecasting}
+Alysha~M De~Livera, Rob~J Hyndman, and Ralph~D Snyder.
+\newblock Forecasting time series with complex seasonal patterns using
+  exponential smoothing.
+\newblock \emph{Journal of the American Statistical Association}, 106:\penalty0
+  1513--1527, 2011.
+
+\bibitem[Gould et~al.(2008)Gould, Koehler, Ord, Snyder, Hyndman, and
+  Vahid-Araghi]{gould2008forecasting}
+Phillip~G Gould, Anne~B Koehler, J~Keith Ord, Ralph~D Snyder, Rob~J Hyndman,
+  and Farshid Vahid-Araghi.
+\newblock Forecasting time series with multiple seasonal patterns.
+\newblock \emph{European Journal of Operational Research}, 191:\penalty0
+  207--222, 2008.
+
+\bibitem[Harvey and Koopman(1993)]{harvey1993forecasting}
+Andrew Harvey and Siem~Jan Koopman.
+\newblock Forecasting hourly electricity demand using time-varying splines.
+\newblock \emph{Journal of the American Statistical Association}, 88\penalty0
+  (424):\penalty0 1228--1236, 1993.
+
+\bibitem[Harvey et~al.(1997)Harvey, Koopman, and Riani]{harvey1997modeling}
+Andrew Harvey, Siem~Jan Koopman, and Marco Riani.
+\newblock The modeling and seasonal adjustment of weekly observations.
+\newblock \emph{Journal of Business \& Economic Statistics}, 15\penalty0
+  (3):\penalty0 354--368, 1997.
+
+\bibitem[Holt(1957)]{holt1957forecasting}
+Charles~C Holt.
+\newblock Forecasting seasonals and trends by exponentially weighted moving
+  averages.
+\newblock Technical report, 1957.
+
+\bibitem[Hyndman et~al.(2002)Hyndman, Koehler, Snyder, and
+  Grose]{hyndman2002state}
+Rob~J Hyndman, Anne~B Koehler, Ralph~D Snyder, and Simone Grose.
+\newblock A state space framework for automatic forecasting using exponential
+  smoothing methods.
+\newblock \emph{International Journal of Forecasting}, 18:\penalty0 439--454,
+  2002.
+
+\bibitem[Pedregal and Young(2006)]{pedregal2006modulated}
+Diego~J Pedregal and Peter~C Young.
+\newblock Modulated cycles, an approach to modelling periodic components from
+  rapidly sampled data.
+\newblock \emph{International Journal of Forecasting}, 22\penalty0
+  (1):\penalty0 181--194, 2006.
+
+\bibitem[Taylor(2003)]{taylor2003short}
+James~W Taylor.
+\newblock Short-term electricity demand forecasting using double seasonal
+  exponential smoothing.
+\newblock \emph{Journal of the Operational Research Society}, 54:\penalty0
+  799--805, 2003.
+
+\bibitem[Taylor(2010)]{taylor2010triple}
+James~W Taylor.
+\newblock Triple seasonal methods for short-term electricity demand
+  forecasting.
+\newblock \emph{European Journal of Operational Research}, 204:\penalty0
+  139--152, 2010.
+
+\bibitem[Winters(1960)]{winters1960forecasting}
+Peter~R Winters.
+\newblock Forecasting sales by exponentially weighted moving averages.
+\newblock \emph{Management Science}, 6:\penalty0 324--342, 1960.
+
+\end{thebibliography}
