@@ -1,0 +1,147 @@
+\documentclass{uwstat572}
+
+%%\setlength{\oddsidemargin}{0.25in}
+%%\setlength{\textwidth}{6in}
+%%\setlength{\topmargin}{0.5in}
+%%\setlength{\textheight}{9in}
+
+\renewcommand{\baselinestretch}{1.5} 
+\usepackage{amsmath}
+\usepackage{bm}
+
+\bibliographystyle{plainnat}
+
+\begin{document}
+%%\maketitle
+
+\begin{center}
+  {\LARGE Forecasting Time Series With Complex Seasonal Patterns Using Exponential Smoothing}\\\ \\
+  {Mengjie Pan \\ 
+    Department of Statistics, University of Washington Seattle, WA, 98195, USA
+  }
+\end{center}
+
+
+%\begin{abstract}
+%  Put your project summary here.
+%\end{abstract}
+
+\section{Introduction}
+
+\hspace{4ex}Many time series have complex seasonal patterns, such as non-integer seasonal periods, multiple nested and non-nested seasonal periods. For example, a weekly series of U.S. gasoline products supplied has an annual seasonal pattern with a non-integer period of 365.25/7 $\approx 52.18$. A five-minute interval series of number of call arrivals in a commercial bank has a daily seasonal pattern and a weekly seasonal pattern, which is an example of multiple nested seasonal periods. We also provide an example of non-integer and multiple non-nest seasonal periods: a daily series of the electricity demand in Turkey is affected by events on the Hijri calendar of a period of 354.37 and the Gregorian calendar of a period of 365.25, and therefore has two annual seasonal patterns whose periods are approximately eleven days apart. 
+
+A number of existing approaches deal with some of the above complexities. \citet{pedregal2006modulated}, \citet{harvey1993forecasting} and \citet{taylor2003short} considered double seasonality, and \citet{taylor2010triple} considered triple seasonality. \citet{harvey1997modeling} used single trigonometric seasonality to deal with non-integer seasonal period. However, none of the previous methods allows for non-integer seasonal periods and multiple seasonal periods at the same time, and therefore cannot be applied to Turkish electricity demand time series. To remedy this shortcoming, \citet{de2011forecasting} propose two new innovations state space models using exponential smoothing. 
+
+We now present some literature on the development of forecasting models using exponential smoothing. Simple exponential smoothing calculates forecasts using weighted averages of observed time series, where the weights decrease exponentially as observations becomes further in the past. \citet{holt1957forecasting} and \citet{winters1960forecasting} extended simple exponential smoothing to include trend and seasonality components in the model. \citet{hyndman2002state} discussed a class of innovations state space models, where `innovations' refers to a single source of error. The innovations state space framework allows trend, seasonality, error specification of forecasting models, and the Holt-Winters additive and multiplicative methods are specific cases of the framework with an additive trend. One of the most commonly used single seasonal models in the framework is the linear version of the Holt-Winters method with additive errors:
+
+\begin{subequations}
+\begin{align}
+ y_t=&l_{t-1}+b_{t-1}+s_{t-m_1}^{(1)}+d_t, \label{eqn:measurement.simple}\\
+ l_t=&l_{t-1}+b_{t-1}+\alpha d_t,\label{eqn:level.simple} \\
+ b_t=&b_{t-1}+\beta d_t,\label{eqn:trend.simple} \\
+ s_t^{(1)}=&s_{t-m_1}^{(1)}+\gamma d_t,\label{eqn:error.simple}
+\end{align}
+\label{eqn:simple}
+\end{subequations}
+
+\noindent where $\{y_t\}$ is the time series, $m_1$ is the period of the seasonal pattern, $\{d_t\}$ is a series of uncorrelated white-noise random variable, $l_t, b_t, s_t$ represent the level, trend and seasonal components at time $t$, and $\alpha,\beta,\gamma$ are smoothing parameters.
+
+One problem is that this model does not allow for non-integer periods and multiple seasonal periods. More seasonal components can be added to this model, ($s_t^{(2)},...,s_t^{(T)}$); however, a large number of initial states ($l_0, b_0, \{ s^{(1)}_{1-m_1}, ..., s_0^{(1)} \},...,  \{ s^{(T)}_{1-m_T}, ..., s_0^{(T)} \}$) need to be estimated when one of the seasonal patterns has large periods. \citet{taylor2003short}, \citet{taylor2010triple}, and \citet{gould2008forecasting} approximated initial seasonal values with various heuristic approaches, but their methods did not lead to optimized values. Another problem is that the above model assumes that the error process $\{d_t\}$ is uncorrelated, but there is empirical evidence that it might be correlated (\citet{taylor2003short}). A further problem is that the nonlinear version of state space models can have infinite forecast variances (\citet{akram2009exponential}). 
+
+To accommodate non-integer seasonal periods and multiple seasonal periods, \citet{de2011forecasting} propose two innovations state space models using exponential smoothing, BATS and TBATS. BATS is an acronym for features of the model: Box-Cox transformation, ARMA errors, Trend, and Seasonal components. Box-Cox transformation is employed to allow some nonlinearity yet avoid the problem with nonlinear models mentioned above, and ARMA process is used to allow correlation of errors. TBATS is an extension of BATS based on trigonometric formulation of seasonal components, with the initial T connoting ``trigonometric". The benefits of trigonometric formulation are the ability to have non-integer seasonal periods and significant decrease of the number of initial states. \citet{de2011forecasting} introduce a new state space modeling framework, which includes the two new models they propose.  
+
+\citet{de2011forecasting} present an estimation algorithm which returns least squares estimates of initial states and maximum likelihood estimates of parameters. With estimated parameters and initial states, they can obtain point forecasts and forecast intervals using inverse Box-Cox transformation of quantiles of the prediction distribution. We reproduced the proposed models and  applied them to all three datasets of U.S. gasoline supply, number of call arrivals, and electricity demand in Turkey. We evaluate our forecasts from our proposed models using the root mean squared error (RMSE), and we compare BATS forecasts with TBATS forecasts.
+
+\section{Methods}
+\subsection{BATS Model}
+To deal with the problems with nonlinear models and correlated errors and allow for multiple seasonal periods, \citet{de2011forecasting} propose BATS model. BATS model adds a Box-Cox transformation and more seasonal periods to model \ref{eqn:simple} and replace white noise errors with ARMA errors. The complete formulation of BATS model is:  
+
+\begin{subequations}
+\begin{align}
+y_t^{  (w)} = &\left\{
+\begin{array}{l l}
+\frac{y_t^{w}-1}{w}, & if \;\; w \neq 0,\\
+\log y_t, & if\;\; w=0,\\
+\end{array} \right. \\
+y_t^{  (w)}=&l_{t-1}+\phi b_{t-1} +\sum\limits_{i=1}^T s_{t-m_i}^{(i)}+d_t, \label{eqn:measurement} \\
+l_t=&l_{t-1}+\phi b_{t-1}+\alpha d_t,\label{eqn:level}  \\
+ b_t=&\phi b_{t-1}+\beta d_t, \label{eqn:trend} \\
+ s_t^{(i)}=&s_{t-mi}^{(i)}+\gamma_i d_t, \label{eqn:seasonal} \\
+ d_t=&\sum\limits_{i=1}^p \varphi_id_{t-i} +\sum\limits_{i=1}^q \theta_i \epsilon_{t-i}+\epsilon_t, \\
+ \epsilon_t &  \stackrel{iid}{\sim} N(0,\sigma^2),
+\end{align}
+\end{subequations}
+\noindent where $m_1,..., m_T$ denote the seasonal periods, $l_t$ and $b_t$ are the level and trend components at time $t$, $s_t^{(i)}$ represents the $i$th seasonal component at time $t$, and $d_t$ denotes ARMA(p,q) process. Parameters $\alpha, \beta, \gamma_i, i=1,...,T$ are smoothing parameters, and $\phi$ is a damping parameter. Equation \ref{eqn:measurement} is usually referred to as the measurement equation, and Equations \ref{eqn:level}-\ref{eqn:seasonal} are usually referred to as transition equations as they describe how the unobserved components or states (level, trend, seasonal) change over time. 
+
+We define an identifier BATS$( \omega, \phi, p, q, m_1, m_2, ..., m_T )$. BATS model reduces to model \ref{eqn:simple} when $\omega=1$, $\phi=1$, $p=q=0$ and $T=1$, so model \ref{eqn:simple} is given by BATS$(1,1,0,0, m_1)$. Compared to model \ref{eqn:simple}, BATS model has more flexibility for fitting time series data since it has the option of including Box-Cox transformation and ARMA errors. However, depending on the actual dataset, BATS model with non-trivial $\omega, p, q$ may be less preferred to more simple models such as model \ref{eqn:simple}. The model selection with appropriate orders $p$ and $q$ and with inclusion of non-trivial Box-Cox parameter or damping parameter is described in Section \ref{sec:selection}. 
+
+The seasonal part of the measurement equation is $\sum\limits_{i=1}^T s_{t-m_i}^{(i)}$, which does not make sense when $m_i$ is not an integer. Another disadvantage of BATS model is that the number of initial states to be estimated is $\sum\limits_{i=1}^T m_i$, which could be large if at least one $m_i$ is large. To fix these two problems, \citet{de2011forecasting} propose TBATS model, which is described in the next section.  
+
+\subsection{TBATS Model}
+The main distinction between BATS model and TBATS model is that TBATS model is based on trigonometric formulation of seasonal components, thus allowing non-integer seasonal periods. The seasonal part of the measurement equation needs to adjust with this change of formulation of seasonal components. The complete formulation of TBATS model is:
+
+\begin{subequations}
+\begin{align}
+y_t^{  (w)} =& \left\{
+\begin{array}{l l}
+\frac{y_t^{w}-1}{w}, & if \;\; w \neq 0,\\
+\log y_t, & if\;\; w=0,\\
+\end{array} \right. \\
+y_t^{  (w)}=&l_{t-1}+\phi b_{t-1} +\sum\limits_{i=1}^T s_{t-1}^{(i)}+d_t, \\
+l_t=&l_{t-1}+\phi b_{t-1}+\alpha d_t, \\
+ b_t=&\phi b_{t-1}+\beta d_t, \\
+s_t^{(i)}=&\sum\limits_{j=1}^{k_i} s_{j,t}^{(i)},\;\;  \lambda_{j}^{(i)}=2\pi j /m_i \\
+s_{j,t}^{(i)}=&s_{j,t-1}^{(i)} \cos \lambda_j^{(i)} + s_{j,t-1}^{*(i)} \sin \lambda_j^{(i)} +\gamma_1^{(i)}d_t, \\
+s_{j,t}^{*(i)}=&-s_{j,t-1}^{(i)} \sin \lambda_j^{(i)} + s_{j,t-1}^{*(i)} \cos \lambda_j^{(i)} +\gamma_2^{(i)}d_t. \\
+ d_t=&\sum\limits_{i=1}^p \varphi_id_{t-i} +\sum\limits_{i=1}^q \theta_i \epsilon_{t-i}+\epsilon_t, \\
+ \epsilon_t & \stackrel{iid}{\sim} N(0,\sigma^2),
+\end{align}
+\end{subequations}
+\noindent where $m_1,..., m_T$ denote the seasonal periods, $l_t$ and $b_t$ are the level and trend components at time $t$, $s_t^{(i)}$ represents the $i$th seasonal component at time $t$, and $d_t$ denotes ARMA(p,q) process. In the trigonometric formulation of seasonal components, $k_i$ is the number of harmonics for $i$th seasonal component, $s_{j,t}^{(i)}$ is the stochastic level of the $i$th seasonal component, and$s_{j,t}^{*(i)}$ is the stochastic growth in the level of the $i$th seasonal component. Parameters $\alpha, \beta, \gamma_i, i=1,...,T$ are smoothing parameters, and $\phi$ is a damping parameter. 
+
+We define an identifier TBATS$( \omega, \phi, p, q, \{m_1,k_1\}, \{m_2,k_2\},...,{m_T,k_T} )$. The number of initial states to be estimated is $2\sum\limits_{i=1}^T k_i$. If we take $k_i=m_i/2$ for even numbers of $m_i$ or $k_i=(m_i-1)/2$ for odd numbers of $m_i$, the number of estimated initial states will be approximately equal to that of BATS model. However, it is anticipated that most seasonal components require fewer than $m_i/2$ harmonics. 
+
+TBATS model resolves both of the problems occurred with BATS model while remaining its advantages: it allows for non-integer seasonal periods and multiple seasonal periods, and significantly decreases the number of estimated initial states. It is necessary to select the number of harmonics $k_i$ and orders $p$ and $q$ before we fit a TBATS model to data. The model selection procedure will be described in Section \ref{sec:selection}.
+
+\subsection{Innovations State Space Formulations}
+\citet{de2011forecasting} introduce a new linear innovations state space modeling framework to include the Box-Cox transformation, with BATS and TBATS as special cases of the framework. The linear innovations state space model has the form:
+
+\begin{subequations}
+\begin{align}
+y_t^{  (w)}=&\textbf{w}'\textbf{x}_{t-1}+\epsilon_t, \\
+\textbf{x}_t=&\textbf{Fx}_{t-1}+\textbf{g}\epsilon_t,
+\end{align}
+\end{subequations}
+\noindent where $\textbf{w}'$ is a row vector, \textbf{g} is a column vector, \textbf{F} is a matrix, and $\textbf{x}_t$ is the unobserved state vector at time $t$.
+
+\subsubsection{BATS Model}
+The state vector of the BATS model is $\textbf{x}_t=(l_t,b_t,\textbf{s}_t^{(1)},...,\textbf{s}_t^{(T)}, d_t, d_{t-1},..., d_{t-p+1}, \epsilon_t, \epsilon_{t-1}, \epsilon_{t-q+1} )'$, 
+where $\textbf{s}_t^{(i)}=(s_t^{(i)}, s_{t-1}^{(i)} ,..., s_{t-(m_i-1)}^{(i)}  )$. Let $\bm{\gamma}^{(i)}$=$(\gamma_i, \textbf{0}_{m_i-1})$, $\bm{\varphi}=(\varphi_1, \varphi_2,..., \varphi_p)$, and $\bm{\theta}=(\theta_1,\theta_2,...,\theta_q)$; let $\textbf{O}_{u,v}$ be a $u \times v$ matrix of zeros, let $\textbf{I}_{u,v}$ be a $u \times v$ rectangular diagonal matrix with element 1 on the diagonal, and let $\textbf{a}^{(i)}=(\textbf{0}_{m_i-1},1)$ and $\textbf{a}=(\textbf{a}^{(1)},...,\textbf{a}^{(T)})$. We define the matrices $\textbf{B}=\bm{\gamma}'\bm{\varphi}, \textbf{C}=\bm{\gamma}'\bm{\theta}$, $\textbf{A}_i=\begin{bmatrix} 
+\textbf{0}_{m_i-1} &1 \\ 
+\textbf{I}_{m_i-1} & \textbf{0}'_{m_i-1} 
+\end{bmatrix}$ and $\textbf{A}=\oplus _{i=1}^T \textbf{A}_i$, where $\oplus$ denotes the direct sum of the matrices. Let $\tau=\sum_{i=1}^{T} m_i$. Then the matrices for the BATS model can be written as $\textbf{w}=(1,\phi,\textbf{a}, \bm{\varphi}, \bm{\theta})'$, \textbf{g}=$(\alpha,\beta,\bm{\gamma}, 1, \textbf{0}_{p-1}, 1, \textbf{0}_{q-1})'$, and 
+
+
+\subsubsection{TBATS Model}
+
+
+\subsection{Estimation Algorithm}
+
+\subsection{Model Selection}
+\label{sec:selection}
+
+\nocite{*}
+
+\bibliography{ref}
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
