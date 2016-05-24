@@ -54,7 +54,7 @@ To accommodate non-integer seasonal periods and multiple seasonal periods, \cite
 
 \section{Methods}
 \subsection{BATS Model}
-To deal with the problems with nonlinear models and correlated errors and allow for multiple seasonal periods, \citet{de2011forecasting} propose BATS model. BATS model adds a Box-Cox transformation and more seasonal periods to model \ref{eqn:simple} and replace white noise errors with ARMA errors. The complete formulation of BATS model is:  
+\hspace{4ex}To deal with the problems with nonlinear models and correlated errors and allow for multiple seasonal periods, \citet{de2011forecasting} propose BATS model. BATS model adds a Box-Cox transformation and more seasonal periods to model \ref{eqn:simple} and replace white noise errors with ARMA errors. The complete formulation of BATS model is:  
 
 \begin{subequations}
 \begin{align}
@@ -78,7 +78,7 @@ We define an identifier BATS$( \omega, \phi, p, q, m_1, m_2, ..., m_T )$. BATS m
 The seasonal part of the measurement equation is $\sum\limits_{i=1}^T s_{t-m_i}^{(i)}$, which does not make sense when $m_i$ is not an integer. Another disadvantage of BATS model is that the number of initial states to be estimated is $\sum\limits_{i=1}^T m_i$, which could be large if at least one $m_i$ is large. To fix these two problems, \citet{de2011forecasting} propose TBATS model, which is described in the next section.  
 
 \subsection{TBATS Model}
-The main distinction between BATS model and TBATS model is that TBATS model is based on trigonometric formulation of seasonal components, thus allowing non-integer seasonal periods. The seasonal part of the measurement equation needs to adjust with this change of formulation of seasonal components. The complete formulation of TBATS model is:
+\hspace{4ex}The main distinction between BATS model and TBATS model is that TBATS model is based on trigonometric formulation of seasonal components, thus allowing non-integer seasonal periods. The seasonal part of the measurement equation needs to adjust with this change of formulation of seasonal components. The complete formulation of TBATS model is:
 
 \begin{subequations}
 \begin{align}
@@ -104,7 +104,7 @@ We define an identifier TBATS$( \omega, \phi, p, q, \{m_1,k_1\}, \{m_2,k_2\},...
 TBATS model resolves both of the problems occurred with BATS model while remaining its advantages: it allows for non-integer seasonal periods and multiple seasonal periods, and significantly decreases the number of estimated initial states. It is necessary to select the number of harmonics $k_i$ and orders $p$ and $q$ before we fit a TBATS model to data. The model selection procedure will be described in Section \ref{sec:selection}.
 
 \subsection{Innovations State Space Formulations}
-\citet{de2011forecasting} introduce a new linear innovations state space modeling framework to include the Box-Cox transformation, with BATS and TBATS as special cases of the framework. One benefit of the innovations state space formulation is that we can easily work with this general formulation when we estimate parameters and make forecasts. The linear innovations state space model has the form:
+\hspace{4ex}\citet{de2011forecasting} introduce a new linear innovations state space modeling framework to include the Box-Cox transformation, with BATS and TBATS as special cases of the framework. One benefit of the innovations state space formulation is that we can easily work with this general formulation when we estimate parameters and make forecasts. The linear innovations state space model has the form:
 
 \begin{subequations}
 \begin{align}
@@ -115,11 +115,12 @@ y_t^{  (w)}=&\textbf{w}'\textbf{x}_{t-1}+\epsilon_t, \\
 \noindent where $\textbf{w}'$ is a row vector, \textbf{g} is a column vector, \textbf{F} is a matrix, and $\textbf{x}_t$ is the unobserved state vector at time $t$.
 
 \subsubsection{BATS Model}
-The state vector of the BATS model is $\textbf{x}_t=(l_t,b_t,\textbf{s}_t^{(1)},...,\textbf{s}_t^{(T)}, d_t, d_{t-1},..., d_{t-p+1}, \epsilon_t, \epsilon_{t-1}, \epsilon_{t-q+1} )'$, 
-where $\textbf{s}_t^{(i)}=(s_t^{(i)}, s_{t-1}^{(i)} ,..., s_{t-(m_i-1)}^{(i)}  )$. Let $\bm{\gamma}^{(i)}$=$(\gamma_i, \textbf{0}_{m_i-1})$, $\bm{\varphi}=(\varphi_1, \varphi_2,..., \varphi_p)$, and $\bm{\theta}=(\theta_1,\theta_2,...,\theta_q)$; let $\textbf{O}_{u,v}$ be a $u \times v$ matrix of zeros, let $\textbf{I}_{u,v}$ be a $u \times v$ rectangular diagonal matrix with element 1 on the diagonal, and let $\textbf{a}^{(i)}=(\textbf{0}_{m_i-1},1)$ and $\textbf{a}=(\textbf{a}^{(1)},...,\textbf{a}^{(T)})$. We define the matrices $\textbf{B}=\bm{\gamma}'\bm{\varphi}, \textbf{C}=\bm{\gamma}'\bm{\theta}$, $\textbf{A}_i=\begin{bmatrix} 
+\hspace{4ex}The state vector of the BATS model is $\textbf{x}_t=(l_t,b_t,\textbf{s}_t^{(1)},...,\textbf{s}_t^{(T)}, d_t, d_{t-1},..., d_{t-p+1}, \epsilon_t, \epsilon_{t-1},\\ \epsilon_{t-q+1} )'$, 
+where $\textbf{s}_t^{(i)}=(s_t^{(i)}, s_{t-1}^{(i)} ,..., s_{t-(m_i-1)}^{(i)}  )$. Let $\bm{\gamma}^{(i)}$=$(\gamma_i, \textbf{0}_{m_i-1})$, $\bm{\gamma}=(\bm{\gamma}^{(1)},\bm{\gamma}^{(2)},...,\bm{\gamma}^{(T)})$, $\bm{\varphi}=(\varphi_1, \varphi_2,..., \varphi_p)$, and $\bm{\theta}=(\theta_1,\theta_2,...,\theta_q)$; let $\textbf{O}_{u,v}$ be a $u \times v$ matrix of zeros, let $\textbf{I}_{u,v}$ be a $u \times v$ rectangular diagonal matrix with element 1 on the diagonal, and let $\textbf{a}^{(i)}=(\textbf{0}_{m_i-1},1)$ and $\textbf{a}=(\textbf{a}^{(1)},...,\textbf{a}^{(T)})$. We define the matrices $\textbf{B}=\bm{\gamma}'\bm{\varphi}, \textbf{C}=\bm{\gamma}'\bm{\theta}$, $\textbf{A}_i=\begin{bmatrix} 
 \textbf{0}_{m_i-1} &1 \\ 
 \textbf{I}_{m_i-1} & \textbf{0}'_{m_i-1} 
-\end{bmatrix}$ and $\textbf{A}=\oplus _{i=1}^T \textbf{A}_i$, where $\oplus$ denotes the direct sum of the matrices. Let $\tau=\sum_{i=1}^{T} m_i$. Then the matrices for the BATS model can be written as $\textbf{w}=(1,\phi,\textbf{a}, \bm{\varphi}, \bm{\theta})' \in \mathbf{R}^{2+\tau+p+q}$, \textbf{g}=$(\alpha,\beta,\bm{\gamma}, 1, \textbf{0}_{p-1}, 1, \textbf{0}_{q-1})'\in \mathbf{R}^{2+\tau+p+q}$, and 
+\end{bmatrix}$ and $\textbf{A}=\oplus _{i=1}^T \textbf{A}_i$, where $\oplus$ denotes the direct sum of the matrices. Let $\tau=\sum_{i=1}^{T} m_i$. 
+Then the matrices for the BATS model can be written as $\textbf{w}=(1,\phi,\textbf{a}, \bm{\varphi}, \bm{\theta})' \in \mathbf{R}^{2+\tau+p+q}$, \textbf{g}=$(\alpha,\beta,\bm{\gamma}, 1, \textbf{0}_{p-1}, 1, \textbf{0}_{q-1})'\in \mathbf{R}^{2+\tau+p+q}$, and 
 
 \begin{center}
 $F=\begin{bmatrix} 
@@ -136,7 +137,28 @@ $F=\begin{bmatrix}
 \vspace{2mm} \noindent This is the general formulation with all components present. When one component is not present, the corresponding row and/or column must be omitted. For example, in the absence of a trend component, the second row in $\textbf{g}, \textbf{w}$ and $\textbf{F}$ must be omitted. 
 
 \subsubsection{TBATS Model}
+\hspace{4ex}The innovations state space formulation of the TBATS model is similar to one of the BATS model but has changes in $\textbf{s}_t^{(i)}, \textbf{a}^{(i)}, \bm{\gamma}^{(i)}, \tau$ and $\textbf{A}$ due to trigonometric representation of seasonal components. The state vector of the TBATS model is $\textbf{x}_t=(l_t,b_t,\textbf{s}_t^{(1)},...,\textbf{s}_t^{(T)}, d_t, d_{t-1},\\..., d_{t-p+1},  \epsilon_t, \epsilon_{t-1}, \epsilon_{t-q+1} )'$, 
+where $\textbf{s}_t^{(i)}=(s_{1,t}^{(i)},s_{2,t}^{(i)},..., s_{1,k-_i}^{(i)}, s_{1,t}^{*(i)},s_{2,t}^{*(i)},...,s_{k_i,t}^{*(i)})$. 
+Let $\textbf{1}_r$ and $\textbf{0}_r$ be one-vector and zero-vector of length $r$, respectively; let $\bm{\gamma}_1^{(i)}=\gamma_1^{(i)} \textbf{1}_{k_i}, \bm{\gamma}_2^{(i)}=\gamma_2^{(i)} \textbf{1}_{k_i}, \bm{\gamma}^{(i)}$=$(\bm{\gamma}_1^{(i)},\\ \bm{\gamma}_2^{(i)})$, $\bm{\gamma}=(\bm{\gamma}^{(1)},\bm{\gamma}^{(2)},...,\bm{\gamma}^{(T)})$, $\bm{\varphi}=(\varphi_1, \varphi_2,..., \varphi_p)$, and $\bm{\theta}=(\theta_1,\theta_2,...,\theta_q)$; let $\textbf{O}_{u,v}$ be a $u \times v$ matrix of zeros, let $\textbf{I}_{u,v}$ be a $u \times v$ rectangular diagonal matrix with element 1 on the diagonal, and let $\textbf{a}^{(i)}=(\textbf{1}_{k_i},\textbf{0}_{k_i})$ and $\textbf{a}=(\textbf{a}^{(1)},...,\textbf{a}^{(T)})$. We define the matrices $\textbf{B}=\bm{\gamma}'\bm{\varphi}, \textbf{C}=\bm{\gamma}'\bm{\theta}$, $\textbf{A}_i=\begin{bmatrix} 
+\textbf{C}^{(i)} &\textbf{S}^{(i)}  \\ 
+-\textbf{S}^{(i)}  &\textbf{C}^{(i)} 
+\end{bmatrix}$ and $\textbf{A}=\oplus _{i=1}^T \textbf{A}_i$, where $\textbf{C}^{(i)}$ and $\textbf{S}^{(i)}$ are $k_i \times k_i$ diagonal matrices with entries $\cos (\lambda^{(i)}_j) $, $\sin (\lambda^{(i)}_j) $, respectively, for $j=1,2,...,k_i$ and $i=1,2,...,T$, and where $\oplus$ denotes the direct sum of the matrices. Let $\tau=2\sum_{i=1}^{T} k_i$. 
 
+Then the matrices for the TBATS model can be written as $\textbf{w}=(1,\phi,\textbf{a}, \bm{\varphi}, \bm{\theta})' \in \mathbf{R}^{2+\tau+p+q}$, \textbf{g}=$(\alpha,\beta,\bm{\gamma}, 1, \textbf{0}_{p-1}, 1, \textbf{0}_{q-1})'\in \mathbf{R}^{2+\tau+p+q}$, and 
+
+\begin{center}
+$F=\begin{bmatrix} 
+1 & \phi& \textbf{0}_\tau & \alpha \bm{\varphi} & \alpha \bm{\theta}  \\
+0 & \phi& \textbf{0}_\tau & \beta \bm{\varphi} & \beta \bm{\theta}  \\
+\textbf{0}'_\tau &  \textbf{0}'_\tau  & \bm{A} & \bm{B} & \bm{C} \\
+0 & 0 & \textbf{0}'_\tau & \bm{\varphi} & \bm{\theta}  \\
+\bm{0}'_{p-1} & \bm{0}'_{p-1} & \textbf{O}_{p-1,\tau} & \bm{I}_{p-1,p} &\textbf{O}_{p-1,q} \\
+0 & 0 &\textbf{0}_\tau & \textbf{0}_p & \textbf{0}_q \\
+\bm{0}'_{q-1} & \bm{0}'_{q-1} & \textbf{O}_{q-1,\tau} & \bm{I}_{q-1,p} &\textbf{O}_{q-1,q} \\
+\end{bmatrix} \in \mathbf{R}^{(2+\tau+p+q) \times (2+\tau+p+q)}$ 
+\end{center}
+
+\noindent Same as the BATS formulation, when one component is not present, the corresponding row and/or column must be omitted.
 
 \subsection{Estimation Algorithm}
 
