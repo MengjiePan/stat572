@@ -15,7 +15,8 @@
 %%\maketitle
 
 \begin{center}
-  {\LARGE Forecasting Time Series With Complex Seasonal Patterns Using Exponential Smoothing}\\\ \\
+  {\LARGE Forecasting Time Series With Complex Seasonal Patterns Using Exponential Smoothing  }\\\ 
+  {\large Alysha M. De Livera, Rob J. hyndman, and Ralph D. Synder}\\\ \\
   {Mengjie Pan \\ 
     Department of Statistics, University of Washington Seattle, WA, 98195, USA
   }
@@ -66,19 +67,19 @@ y_t^{  (w)} = &\left\{
 y_t^{  (w)}=&l_{t-1}+\phi b_{t-1} +\sum\limits_{i=1}^T s_{t-m_i}^{(i)}+d_t, \label{eqn:measurement} \\
 l_t=&l_{t-1}+\phi b_{t-1}+\alpha d_t,\label{eqn:level}  \\
  b_t=&\phi b_{t-1}+\beta d_t, \label{eqn:trend} \\
- s_t^{(i)}=&s_{t-mi}^{(i)}+\gamma_i d_t, \label{eqn:seasonal} \\
+ s_t^{(i)}=&s_{t-m_i}^{(i)}+\gamma_i d_t, \label{eqn:seasonal} \\
  d_t=&\sum\limits_{i=1}^p \varphi_id_{t-i} +\sum\limits_{i=1}^q \theta_i \epsilon_{t-i}+\epsilon_t, \\
  \epsilon_t &  \stackrel{iid}{\sim} N(0,\sigma^2),
 \end{align}
 \end{subequations}
 \noindent where $m_1,..., m_T$ denote the seasonal periods, $l_t$ and $b_t$ are the level and trend components at time $t$, $s_t^{(i)}$ represents the $i$th seasonal component at time $t$, and $d_t$ denotes ARMA(p,q) process. Parameters $\alpha, \beta, \gamma_i, i=1,...,T$ are smoothing parameters, and $\phi$ is a damping parameter. Equation \ref{eqn:measurement} is usually referred to as the measurement equation, and Equations \ref{eqn:level}-\ref{eqn:seasonal} are usually referred to as transition equations as they describe how the unobserved components or states (level, trend, seasonal) change over time. 
 
-We define an identifier BATS$( \omega, \phi, p, q, m_1, m_2, ..., m_T )$. BATS model reduces to model \ref{eqn:simple} when $\omega=1$, $\phi=1$, $p=q=0$ and $T=1$, so model \ref{eqn:simple} is given by BATS$(1,1,0,0, m_1)$. Compared to model \ref{eqn:simple}, BATS model has more flexibility for fitting time series data since it has the option of including Box-Cox transformation and ARMA errors. However, depending on the actual dataset, BATS model with non-trivial $\omega, p, q$ may be less preferred to more simple models such as model \ref{eqn:simple}. The model selection with appropriate orders $p$ and $q$ and with inclusion of non-trivial Box-Cox parameter or damping parameter is described in Section \ref{sec:selection}. 
+We define an identifier BATS$( \omega, \phi, p, q, m_1, m_2, ..., m_T )$. BATS model reduces to model \ref{eqn:simple} when $\omega=1$, $\phi=1$, $p=q=0$ and $T=1$, so model \ref{eqn:simple} is given by BATS$(1,1,0,0, m_1)$. Compared to model \ref{eqn:simple}, BATS model has more flexibility for fitting time series data since it has the option of including Box-Cox transformation and ARMA errors. However, depending on the actual dataset, BATS model with non-trivial $\omega, p, q$ may be less preferred to more simple models such as model \ref{eqn:simple}. The model selection procedure with appropriate orders $p$ and $q$ and with inclusion of non-trivial Box-Cox parameter or damping parameter is described in Section \ref{sec:selection}. 
 
-The seasonal part of the measurement equation is $\sum\limits_{i=1}^T s_{t-m_i}^{(i)}$, which does not make sense when $m_i$ is not an integer. Another disadvantage of BATS model is that the number of initial states to be estimated is $\sum\limits_{i=1}^T m_i$, which could be large if at least one $m_i$ is large. To fix these two problems, \citet{de2011forecasting} propose TBATS model, which is described in the next section.  
+The seasonal part of the measurement equation is $\sum\limits_{i=1}^T s_{t-m_i}^{(i)}$, which does not make sense when $m_i$ is not an integer. Another disadvantage of BATS model is that the number of initial states to be estimated is $\sum\limits_{i=1}^T m_i$, which could be large if at least one $m_i$ is large. To fix these two problems, \citet{de2011forecasting} propose TBATS model, which we describe in the next section.  
 
 \subsection{TBATS Model}
-\hspace{4ex}The main distinction between BATS model and TBATS model is that TBATS model is based on trigonometric formulation of seasonal components, thus allowing non-integer seasonal periods. The seasonal part of the measurement equation needs to adjust with this change of formulation of seasonal components. The complete formulation of TBATS model is:
+\hspace{4ex}The main distinction between BATS model and TBATS model is that TBATS model is based on trigonometric formulation of seasonal components, thus allowing non-integer seasonal periods. The seasonal part of the measurement equation needs to adjust with this change correspondingly. The complete formulation of TBATS model is:
 
 \begin{subequations}
 \begin{align}
