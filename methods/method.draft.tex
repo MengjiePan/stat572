@@ -104,7 +104,7 @@ We define an identifier TBATS$( \omega, \phi, p, q, \{m_1,k_1\}, \{m_2,k_2\},...
 TBATS model resolves both of the problems occurred with BATS model while remaining its advantages: it allows for non-integer seasonal periods and multiple seasonal periods, and significantly decreases the number of estimated initial states. It is necessary to select the number of harmonics $k_i$ and orders $p$ and $q$ before we fit a TBATS model to data. The model selection procedure will be described in Section \ref{sec:selection}.
 
 \subsection{Innovations State Space Formulations}
-\citet{de2011forecasting} introduce a new linear innovations state space modeling framework to include the Box-Cox transformation, with BATS and TBATS as special cases of the framework. The linear innovations state space model has the form:
+\citet{de2011forecasting} introduce a new linear innovations state space modeling framework to include the Box-Cox transformation, with BATS and TBATS as special cases of the framework. One benefit of the innovations state space formulation is that we can easily work with this general formulation when we estimate parameters and make forecasts. The linear innovations state space model has the form:
 
 \begin{subequations}
 \begin{align}
@@ -119,8 +119,21 @@ The state vector of the BATS model is $\textbf{x}_t=(l_t,b_t,\textbf{s}_t^{(1)},
 where $\textbf{s}_t^{(i)}=(s_t^{(i)}, s_{t-1}^{(i)} ,..., s_{t-(m_i-1)}^{(i)}  )$. Let $\bm{\gamma}^{(i)}$=$(\gamma_i, \textbf{0}_{m_i-1})$, $\bm{\varphi}=(\varphi_1, \varphi_2,..., \varphi_p)$, and $\bm{\theta}=(\theta_1,\theta_2,...,\theta_q)$; let $\textbf{O}_{u,v}$ be a $u \times v$ matrix of zeros, let $\textbf{I}_{u,v}$ be a $u \times v$ rectangular diagonal matrix with element 1 on the diagonal, and let $\textbf{a}^{(i)}=(\textbf{0}_{m_i-1},1)$ and $\textbf{a}=(\textbf{a}^{(1)},...,\textbf{a}^{(T)})$. We define the matrices $\textbf{B}=\bm{\gamma}'\bm{\varphi}, \textbf{C}=\bm{\gamma}'\bm{\theta}$, $\textbf{A}_i=\begin{bmatrix} 
 \textbf{0}_{m_i-1} &1 \\ 
 \textbf{I}_{m_i-1} & \textbf{0}'_{m_i-1} 
-\end{bmatrix}$ and $\textbf{A}=\oplus _{i=1}^T \textbf{A}_i$, where $\oplus$ denotes the direct sum of the matrices. Let $\tau=\sum_{i=1}^{T} m_i$. Then the matrices for the BATS model can be written as $\textbf{w}=(1,\phi,\textbf{a}, \bm{\varphi}, \bm{\theta})'$, \textbf{g}=$(\alpha,\beta,\bm{\gamma}, 1, \textbf{0}_{p-1}, 1, \textbf{0}_{q-1})'$, and 
+\end{bmatrix}$ and $\textbf{A}=\oplus _{i=1}^T \textbf{A}_i$, where $\oplus$ denotes the direct sum of the matrices. Let $\tau=\sum_{i=1}^{T} m_i$. Then the matrices for the BATS model can be written as $\textbf{w}=(1,\phi,\textbf{a}, \bm{\varphi}, \bm{\theta})' \in \mathbf{R}^{2+\tau+p+q}$, \textbf{g}=$(\alpha,\beta,\bm{\gamma}, 1, \textbf{0}_{p-1}, 1, \textbf{0}_{q-1})'\in \mathbf{R}^{2+\tau+p+q}$, and 
 
+\begin{center}
+$F=\begin{bmatrix} 
+1 & \phi& \textbf{0}_\tau & \alpha \bm{\varphi} & \alpha \bm{\theta}  \\
+0 & \phi& \textbf{0}_\tau & \beta \bm{\varphi} & \beta \bm{\theta}  \\
+\textbf{0}'_\tau &  \textbf{0}'_\tau  & \bm{A} & \bm{B} & \bm{C} \\
+0 & 0 & \textbf{0}'_\tau & \bm{\varphi} & \bm{\theta}  \\
+\bm{0}'_{p-1} & \bm{0}'_{p-1} & \textbf{O}_{p-1,\tau} & \bm{I}_{p-1,p} &\textbf{O}_{p-1,q} \\
+0 & 0 &\textbf{0}_\tau & \textbf{0}_p & \textbf{0}_q \\
+\bm{0}'_{q-1} & \bm{0}'_{q-1} & \textbf{O}_{q-1,\tau} & \bm{I}_{q-1,p} &\textbf{O}_{q-1,q} \\
+\end{bmatrix} \in \mathbf{R}^{(2+\tau+p+q) \times (2+\tau+p+q)}$ 
+\end{center}
+
+\vspace{2mm} \noindent This is the general formulation with all components present. When one component is not present, the corresponding row and/or column must be omitted. For example, in the absence of a trend component, the second row in $\textbf{g}, \textbf{w}$ and $\textbf{F}$ must be omitted. 
 
 \subsubsection{TBATS Model}
 
@@ -129,6 +142,8 @@ where $\textbf{s}_t^{(i)}=(s_t^{(i)}, s_{t-1}^{(i)} ,..., s_{t-(m_i-1)}^{(i)}  )
 
 \subsection{Model Selection}
 \label{sec:selection}
+
+\subsection{Forecasting Procedure}
 
 \nocite{*}
 
