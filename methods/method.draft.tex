@@ -109,11 +109,11 @@ TBATS model resolves both of the problems occurred with BATS model while remaini
 
 \begin{subequations}
 \begin{align}
-y_t^{  (w)}=&\textbf{w}'\textbf{x}_{t-1}+\epsilon_t, \\
-\textbf{x}_t=&\textbf{Fx}_{t-1}+\textbf{g}\epsilon_t,
+y_t^{  (w)}=&\textbf{w}'\textbf{x}_{t-1}+\epsilon_t, \label{eqn:innov1}\\
+\textbf{x}_t=&\textbf{Fx}_{t-1}+\textbf{g}\epsilon_t, \label{eqn:innov2}
 \end{align}
 \end{subequations}
-\noindent where $\textbf{w}'$ is a row vector, \textbf{g} is a column vector, \textbf{F} is a matrix, and $\textbf{x}_t$ is the unobserved state vector at time $t$.
+\noindent where $\textbf{w}'$ is a row vector, \textbf{g} is a column vector, \textbf{F} is a matrix, and $\textbf{x}_t$ is the unobserved state vector at time $t$. Equation \ref{eqn:innov1} is referred to as the measurement equation, and Equation \ref{eqn:innov2} is referred to as the transition equation.
 
 \subsubsection{BATS Model}
 \hspace{4ex}The state vector of the BATS model is $\textbf{x}_t=(l_t,b_t,\textbf{s}_t^{(1)},...,\textbf{s}_t^{(T)}, d_t, d_{t-1},..., d_{t-p+1}, \epsilon_t, \epsilon_{t-1},\\ \epsilon_{t-q+1} )'$, 
@@ -162,12 +162,81 @@ $F=\begin{bmatrix}
 \noindent Same as the BATS formulation, when one component is not present, the corresponding row and/or column must be omitted.
 
 \subsection{Estimation Algorithm}
+In this section we derive the likelihood of the observed time series $\textbf{y}=(y_1,y_2,...,y_n)$ and present an estimation algorithm for estimating initial states and parameters, based on the innovations state space formulation. The measurement equation \ref{eqn:innov1} with assumption of $\epsilon_t \sim N(0,\sigma^2)$ implies $y_t^{(\omega)} \sim N(\textbf{w}'\textbf{x}_{t-1},\sigma^2)$. The Jacobian of the Box-Cox transformation is
+
+\begin{center}
+$\displaystyle \frac{\partial y_t^{(\omega)}}{ \partial  y_t }= \left\{
+\begin{array}{l l}
+y_t^{\omega-1}, & if \;\; w \neq 0\\
+1/ y_t, & if\;\; w=0\\
+\end{array} \right. =y_t^{\omega-1}\;\;  \forall \omega,$ 
+\end{center}
+so
+\begin{align*}
+\displaystyle P(y_t| \textbf{x}_{t-1}, \bm{\nu},\sigma^2)&=P(y_t^{(\omega)}| \textbf{x}_{t-1}, \bm{\nu},\sigma^2) \left| \det\left( \frac{\partial y_t^{(\omega)}}{ \partial  y_t }   \right) \right| \\
+&= P(y_t^{(\omega)}| \textbf{x}_{t-1}, \bm{\nu},\sigma^2) y_t^{\omega-1},
+\end{align*}
+where $\bm{\nu}$ is a vector containing Box-Cox parameter, smoothing parameters, damping parameter, and ARMA coefficients. The joint distribution is
+\begin{align*}
+\displaystyle P(\textbf{y}| \textbf{x}_0, \bm{\nu},\sigma^2)&= \prod\limits_{t=1}^n P(y_t|y_1,...,y_{t-1},\textbf{x}_0, \bm{\nu},\sigma^2) \\
+&= \displaystyle   \prod\limits_{t=1}^n P(y_t|\textbf{x}_{t-1}, \bm{\nu},\sigma^2)
+= \displaystyle   \prod\limits_{t=1}^n  P(y_t^{(\omega)}| \textbf{x}_{t-1}, \bm{\nu},\sigma^2) y_t^{\omega-1} \\
+&=\displaystyle   \prod\limits_{t=1}^n P(\epsilon_t)  \prod\limits_{t=1}^n y_t^{\omega-1}
+=\displaystyle \frac{1}{(2\pi \sigma^2)^{n/2}} \exp \left(  \frac{-1}{2\sigma^2}  \sum\limits_{t=1}^n \epsilon_t^2 \right)   \prod\limits_{t=1}^n y_t^{\omega-1},
+\end{align*}
+
+\noindent which gives the log likelihood
+\begin{equation}
+\mathcal{L}(\textbf{x}_0, \bm{\nu},\sigma^2)=-\frac{n}{2} \log (2\pi \sigma^2) -\frac{1}{2\sigma^2} \sum\limits_{t=1}^n \epsilon_t^2 +(\omega-1) \sum\limits_{t=1}^n \log(y_t).
+\label{eqn:loglik}
+\end{equation}
+
+\noindent Plugging in the maximum likelihood estimate of variance $\hat{\sigma^2}=n^{-1} \sum\limits_{t=1}^n \epsilon_t^2$ into Equation \ref{eqn:loglik}, dropping constant terms and multiplying by $-2$, we get
+
+\begin{equation}
+\mathcal{L}^{*}(\textbf{x}_0, \bm{\nu},\sigma^2)=n \log (\sum\limits_{t=1}^n \epsilon_t^2)-2(\omega-1) \sum\limits_{t=1}^n \log(y_t).
+\label{eqn:objective}
+\end{equation}
+
+Our objective is to find maximum likelihood estimates, and equivalently to minimize Equation \ref{eqn:objective}. One challenge is that when the number of initial states is large, there are too many values to be optimized. To reduce the number of parameters in the numerical optimization problem, \citet{de2011forecasting} propose to concentrate the initial state out of the likelihood. The idea is to write errors $\epsilon_t$ as a linear function of initial states $\textbf{x}_0$ and then use least squares to estimate $\textbf{x}_0$. Under the innovations state space formulation, the transition equation \ref{eqn:innov2} is equivalent to 
+\begin{equation}
+\textbf{x}_t=\textbf{D}\textbf{x}_{t-1}+\textbf{g}y_t^{(\omega)}, \label{eqn:backsolve}
+\end{equation}
+where $\textbf{D}=\textbf{F}-\textbf{g} \textbf{w}'$. To see why this holds, we substitute $\displaystyle  \epsilon_t=y_t^{(\omega)}-\textbf{w}'\textbf{x}_{t-1}$ into the transition equation \ref{eqn:innov2} and we get
+\begin{align*}
+\textbf{x}_t&= \textbf{F}\textbf{x}_{t-1}+\textbf{g}(y_t^{(\omega)}-\textbf{w}'\textbf{x}_{t-1}) \\
+&= (\textbf{F}-\textbf{g} \textbf{w}') \textbf{x}_{t-1} +\textbf{g} y_t^{(\omega)} \\
+&= \textbf{D} \textbf{x}_{t-1} +\textbf{g}y_t^{(\omega)}  .
+\end{align*}
+Then we can back-solve the recurrence equation \ref{eqn:backsolve} to get 
+\begin{center}
+$\textbf{x}_t=\textbf{D}^t \textbf{x}_0+\sum\limits_{j=0}^{t-1} \textbf{D}^j \textbf{g} y_{t-j}$.
+\end{center}
+Thus we have 
+\begin{align*}
+\epsilon_t &= y_t^{(\omega)}-\textbf{w}'\textbf{x}_{t-1} \\
+&= y_t^{(\omega)}-\textbf{w}'\textbf{D}^{t-1} \textbf{x}_0-\textbf{w}' \sum\limits_{j=0}^{t-2} \textbf{D}^j \textbf{g} y_{t-1-j} \\
+&=  y_t^{(\omega)}-\textbf{w}' \sum\limits_{j=1}^{t-1} \textbf{D}^{j -1}\textbf{g} y_{t-j} -\textbf{w}' \textbf{D}^{t-1} \textbf{x}_0\\
+&=  y_t^{(\omega)}- \textbf{w}' \tilde{\textbf{x}}_{t-1}-\textbf{w}'_{t-1}\textbf{x}_0 \\
+&= \tilde{y}_t -\textbf{w}'_{t-1}\textbf{x}_0,
+\end{align*}
+where $ \tilde{y}_t=y_t^{(\omega)}- \textbf{w}' \tilde{\textbf{x}}_{t-1}, \tilde{\textbf{x}}_t=\textbf{D}\tilde{\textbf{x}}_{t-1}+\textbf{g}y_t^{(\omega)}, \tilde{\textbf{x}}_0=\textbf{0}, \textbf{w}'_{t}=\textbf{D}\textbf{w}'_{t-1}$, and $\textbf{w}'_{0}=\textbf{w}'$. We can interpret $\textbf{x}_0$ as a linear regression coefficients vector and thus use conventional least squares methods to estimate $\textbf{x}_0$. The estimated initial states are 
+\begin{center}
+$\displaystyle \hat{\textbf{x}}_0 = (\tilde{\textbf{w}}^T \tilde{\textbf{w}})^{-1}\tilde{\textbf{w}}^T \tilde{y}$,
+\end{center}
+where $\tilde{y}=(\tilde{y}_1 ,\tilde{y}_2  , \cdots , \tilde{y}_n )' $ and $\tilde{\textbf{w}}=(\textbf{w}_0 ,\textbf{w}_1  ,\cdots , \textbf{w}_{n-1})'$. The optimized errors are $\hat{\epsilon}_t=\tilde{y}_t-\textbf{w}_{t-1}' \hat{\textbf{x}}_0$. Now the optimization problem reduces to minimizing the following function with respect to $\nu$:
+\begin{equation}
+\mathcal{L}^{*}(\bm{\nu})=n \log (\sum\limits_{t=1}^n \hat{\epsilon}_t^2)-2(\omega-1) \sum\limits_{t=1}^n \log(y_t).
+\label{eqn:objective.reduce}
+\end{equation}
+
+In the R package \texttt{forecast} and my own implementation, the Nelder-Mead algorithm in \texttt{optim} is used to perform numerical optimization. Due to the size of dataset and speed of numerical optimization, a two-step method is employed to find estimates: with initial parameters, initial states are estimated using least squares methods; then with the estimated initial states, \texttt{optim} returns parameter estimates which minimizes objective function \ref{eqn:objective.reduce}.  
 
 \subsection{Model Selection}
 \label{sec:selection}
-
+To be continued.
 \subsection{Forecasting Procedure}
-
+To be continued.
 \nocite{*}
 
 \bibliography{ref}
