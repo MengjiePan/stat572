@@ -28,7 +28,7 @@
 
 \begin{center}
   {\LARGE Forecasting Time Series With Complex Seasonal Patterns Using Exponential Smoothing  }\\\ 
-  {\large Alysha M. De Livera, Rob J. hyndman, and Ralph D. Synder}\\\ \\
+  {\large Alysha M. De Livera, Rob J. Hyndman, and Ralph D. Synder}\\\ \\
   {Mengjie Pan \\ 
     Department of Statistics, University of Washington Seattle, WA, 98195, USA
   }
@@ -262,7 +262,9 @@ where $\tilde{y}=(\tilde{y}_1 ,\tilde{y}_2  , \cdots , \tilde{y}_n )' $ and $\ti
 \label{eqn:objective.reduce}
 \end{equation}
 
-In the R package \texttt{forecast} and my own implementation, the Nelder-Mead algorithm in the R base function \texttt{optim} is used to perform numerical optimization. Due to the size of dataset and speed of numerical optimization, a two-step method is employed to find estimates: with initial parameters, initial states are estimated using least squares methods; then with the estimated initial states, \texttt{optim} returns parameter estimates which minimizes the objective function \ref{eqn:objective.reduce}.  
+In the R package \texttt{forecast} and my own implementation, the Nelder-Mead algorithm in the R base function \texttt{optim} is used to perform numerical optimization. Due to the size of dataset and speed of numerical optimization, a two-step method is employed to find estimates: with initial parameters, initial states are estimated using least squares methods; then with the estimated initial states, \texttt{optim} returns parameter estimates which minimizes the objective function \ref{eqn:objective.reduce}. 
+
+We can constrain the estimates to the forecastability region \citet{hyndman2008admissible}, where the characteristic roots of $\textbf{D}$ lie within the unit circle to ensure that we place smaller weights on older data. In our implementation, we also constrain $0.8\leq \phi \leq 1$ and $0 \leq \omega \leq 1$ along with constraints of ARMA coefficients to ensure causality and invertibility. For the BATS model, the initial seasonal states for each seasonal component are constrained to sum to zero. 
 
 \subsection{Model Selection}
 \label{sec:selection}
