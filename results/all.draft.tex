@@ -309,6 +309,22 @@ For each dataset, we present parameter estimates of the fitted BATS and TBATS mo
 \hspace{4ex}Figure \ref{fig:data} (top) shows the number of barrels of motor gasoline product supplied in the United States, in thousands of barrels per day, from February 1991 to July 2005. The data shows an annual seasonal pattern with seasonal period $m_1=365.25/7 \approx 52.18$, and an upward trend. We used $n=484$ observations for training and $p=261$ observations for testing. For the gasoline data, a set of eight models (inclusion of non-trivial Box-Cox transformation, non-trivial damped trend, or ARMA components) were tried, and the model with minimum AIC was selected to be the final model.  For TBATS model, the harmonics selection procedure selected $k_1=9$. The final model is TBATS(0.6562,0.8035,0,0,\{365.25/7,9\}), and the estimates are shown in Table \ref{table:TBATS}. The trigonometric decomposition of the Gasoline time series is shown in Figure \ref{fig:tbatsDecompGas}. For BATS model, the seasonal period has to be rounded off to the nearest integer. The final model is BATS (1,1,1,0,52), and the estimates are shown in Table \ref{table:BATS}. The estimated value of $\beta$ is almost zero and the model selected has no damping effect, which suggests that there is little variation in growth rate. Since this is a small dataset, both TBATS and BATS models took about ten minutes to run, but BATS model has the disadvantage of have 52 initial states to be estimated and may therefore suffer from over-parameterization. Table \ref{table:number} summarizes the number of estimated parameters for each model.
 
 The reproduced estimates are different from ones in the paper but are the same as ones from the \texttt{forecast} package. The main difference lies the initialization and optimization method. I have consulted Prof.\ Hyndman, and he replied, ``Several differences occur because of the way initialization and optimization has been handled. I think the implementation in the forecast package is better." Figure \ref{fig:gasRMSE} shows the out-of-sample RMSE using BATS(1,1,1,0,52) and TBATS(0.6562,0.8035,0,0,\{365.25/7,9\}), where TBATS model has better forecasts than BATS model at all lead times. The out-of-sample forecasts presented in the report have large RMSE values at every lead time than ones presented in the paper for both TBATS and BATS model. Plugging in the paper estimates and the corresponding initial states into the likelihood function, we find BATS and TBATS models in the paper have negative likelihood 8485.34, 8433.85 and AIC 8605.34, 8479.85, respectively. Our fitted BATS and TBATS models have negative likelihood 8338.17, 8411.65 and AIC 8456.17, 8463.65, respectively. So our fitted models have larger likelihood than models in the paper, yet have poorer forecasts on the test set. 
+\begin{table}[]
+\small
+\centering
+\caption{Number of estimated parameters for each model in each application}
+\label{table:number}
+\begin{tabular}{l l l l l l l l l l l l l l l l}
+\hline \hline
+Data & Model & No.parameters \\ \hline
+Gasoline & BATS(1,1,1,0,52) & 59 \\
+ & TBATS(0.6562,0.8035,0,0,\{365.25/7,9\}) & 26 \\
+ Call center & BATS(1,NA,2,0,169,845) & 1022  \\
+  & TBATS(1,NA,2,2,\{169,6\},\{845,4\}) & 34  \\
+ Electricity & BATS(1,1,5,4,7,354,365) & 752  \\
+  & TBATS(1,1,1,5,\{7,3\},\{354.37,5\},\{365.25,10\}) & 58  \\ \hline
+\end{tabular}
+\end{table}
 
 \begin{table}[]
 \small
@@ -410,23 +426,13 @@ Their combined effect is shown in the fourth panel, where \vmadd{the} Hijri and 
   \label{fig:tbatsDecompTelec}
 \end{figure}
 
-\begin{table}[]
-\small
-\centering
-\caption{Number of estimated parameters for each model in each application}
-\label{table:number}
-\begin{tabular}{l l l l l l l l l l l l l l l l}
-\hline \hline
-Data & Model & No.parameters \\ \hline
-Gasoline & BATS(1,1,1,0,52) & 59 \\
- & TBATS(0.6562,0.8035,0,0,\{365.25/7,9\}) & 26 \\
- Call center & BATS(1,NA,2,0,169,845) & 1022  \\
-  & TBATS(1,NA,2,2,\{169,6\},\{845,4\}) & 34  \\
- Electricity & BATS(1,1,5,4,7,354,365) & 752  \\
-  & TBATS(1,1,1,5,\{7,3\},\{354.37,5\},\{365.25,10\}) & 58  \\ \hline
-\end{tabular}
-\end{table}
 
+\begin{figure}[]
+\centering
+  \includegraphics[width=\linewidth,height=6in]{tbatsDecompTelecResid.pdf}
+  \caption{Trignometric decomposition of the regressed Turkey demand data. The within-sample RMSE was 458.56.}
+  \label{fig:tbatsDecompTelecResid}
+\end{figure}
 
 
 
