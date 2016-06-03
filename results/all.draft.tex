@@ -23,6 +23,12 @@
 
 \bibliographystyle{plainnat}
 
+\usepackage{color}
+\usepackage{ulem}
+\newcommand{\vmdel}[1]{\sout{#1}}
+\newcommand{\vmadd}[1]{\textbf{\color{red}{#1}}}
+\newcommand{\vmcomment}[1]{({\color{blue}{VM's comment:}} \textbf{\color{blue}{#1}})}
+
 \begin{document}
 %%\maketitle
 
@@ -151,9 +157,8 @@ where $\textbf{s}_t^{(i)}=(s_t^{(i)}, s_{t-1}^{(i)} ,..., s_{t-(m_i-1)}^{(i)}  )
 \textbf{I}_{m_i-1} & \textbf{0}'_{m_i-1} 
 \end{bmatrix}$ and $\textbf{A}=\oplus _{i=1}^T \textbf{A}_i$, where $\oplus$ denotes the direct sum of the matrices. Let $\tau=\sum_{i=1}^{T} m_i$. 
 Then the matrices for the BATS model can be written as $\textbf{w}=(1,\phi,\textbf{a}, \bm{\varphi}, \bm{\theta})' \in \mathbf{R}^{2+\tau+p+q}$, \textbf{g}=$(\alpha,\beta,\bm{\gamma}, 1, \textbf{0}_{p-1}, 1, \textbf{0}_{q-1})'\in \mathbf{R}^{2+\tau+p+q}$, and 
-
-\begin{center}
-$\textbf{F}=\begin{bmatrix} 
+\[
+\textbf{F}=\begin{bmatrix} 
 1 & \phi& \textbf{0}_\tau & \alpha \bm{\varphi} & \alpha \bm{\theta}  \\
 0 & \phi& \textbf{0}_\tau & \beta \bm{\varphi} & \beta \bm{\theta}  \\
 \textbf{0}'_\tau &  \textbf{0}'_\tau  & \bm{A} & \bm{B} & \bm{C} \\
@@ -161,9 +166,8 @@ $\textbf{F}=\begin{bmatrix}
 \bm{0}'_{p-1} & \bm{0}'_{p-1} & \textbf{O}_{p-1,\tau} & \bm{I}_{p-1,p} &\textbf{O}_{p-1,q} \\
 0 & 0 &\textbf{0}_\tau & \textbf{0}_p & \textbf{0}_q \\
 \bm{0}'_{q-1} & \bm{0}'_{q-1} & \textbf{O}_{q-1,\tau} & \bm{I}_{q-1,p} &\textbf{O}_{q-1,q} \\
-\end{bmatrix} \in \mathbf{R}^{(2+\tau+p+q) \times (2+\tau+p+q)}$ 
-\end{center}
-
+\end{bmatrix} \in \mathbf{R}^{(2+\tau+p+q) \times (2+\tau+p+q)}\vmadd{.}
+\]
 \vspace{2mm} \noindent This is the general formulation with all components present. When one component is not present, the corresponding row and/or column must be omitted. For example, in the absence of a trend component, the second row in $\textbf{g}, \textbf{w}$ and $\textbf{F}$ must be omitted. 
 
 \subsubsection{TBATS Model}
@@ -175,9 +179,8 @@ Let $\textbf{1}_r$ and $\textbf{0}_r$ be one-vector and zero-vector of length $r
 \end{bmatrix}$ and $\textbf{A}=\oplus _{i=1}^T \textbf{A}_i$, where $\textbf{C}^{(i)}$ and $\textbf{S}^{(i)}$ are $k_i \times k_i$ diagonal matrices with entries $\cos (\lambda^{(i)}_j) $, $\sin (\lambda^{(i)}_j) $, respectively, for $j=1,2,...,k_i$ and $i=1,2,...,T$, and where $\oplus$ denotes the direct sum of the matrices. Let $\tau=2\sum_{i=1}^{T} k_i$. 
 
 Then the matrices for the TBATS model can be written as $\textbf{w}=(1,\phi,\textbf{a}, \bm{\varphi}, \bm{\theta})' \in \mathbf{R}^{2+\tau+p+q}$, \textbf{g}=$(\alpha,\beta,\bm{\gamma}, 1, \textbf{0}_{p-1}, 1, \textbf{0}_{q-1})'\in \mathbf{R}^{2+\tau+p+q}$, and 
-
-\begin{center}
-$\textbf{F}=\begin{bmatrix} 
+\[
+\textbf{F}=\begin{bmatrix} 
 1 & \phi& \textbf{0}_\tau & \alpha \bm{\varphi} & \alpha \bm{\theta}  \\
 0 & \phi& \textbf{0}_\tau & \beta \bm{\varphi} & \beta \bm{\theta}  \\
 \textbf{0}'_\tau &  \textbf{0}'_\tau  & \bm{A} & \bm{B} & \bm{C} \\
@@ -185,10 +188,9 @@ $\textbf{F}=\begin{bmatrix}
 \bm{0}'_{p-1} & \bm{0}'_{p-1} & \textbf{O}_{p-1,\tau} & \bm{I}_{p-1,p} &\textbf{O}_{p-1,q} \\
 0 & 0 &\textbf{0}_\tau & \textbf{0}_p & \textbf{0}_q \\
 \bm{0}'_{q-1} & \bm{0}'_{q-1} & \textbf{O}_{q-1,\tau} & \bm{I}_{q-1,p} &\textbf{O}_{q-1,q} \\
-\end{bmatrix} \in \mathbf{R}^{(2+\tau+p+q) \times (2+\tau+p+q)}$ 
-\end{center}
-
-\noindent Same as the BATS formulation, when one component is not present, the corresponding row and/or column must be omitted.
+\end{bmatrix} \in \mathbf{R}^{(2+\tau+p+q) \times (2+\tau+p+q)}\vmadd{.}
+\]
+Same as the BATS formulation, when one component is not present, the corresponding row and/or column must be omitted.
 
 \subsubsection{ARIMA Reduced Forms}
 The linear innovations state space models have equivalent ARIMA reduced forms. The reduced forms of BATS and TBATS are summarized and delivered in Section 2.4.3 in \citet{de2011forecasting} and the proofs are presented in \citet{dethesis}. Because the rest of the paper does not rely on ARIMA reduced forms, we do not go into detail in this report. 
@@ -258,13 +260,13 @@ $\displaystyle \hat{\textbf{x}}_0 = (\tilde{\textbf{w}}^T \tilde{\textbf{w}})^{-
 \end{center}
 where $\tilde{y}=(\tilde{y}_1 ,\tilde{y}_2  , \cdots , \tilde{y}_n )' $ and $\tilde{\textbf{w}}=(\textbf{w}_0 ,\textbf{w}_1  ,\cdots , \textbf{w}_{n-1})'$. The optimized errors are $\hat{\epsilon}_t=\tilde{y}_t-\textbf{w}_{t-1}' \hat{\textbf{x}}_0$. Now the optimization problem reduces to minimizing the following function with respect to $\nu$:
 \begin{equation}
-\mathcal{L}^{*}(\bm{\nu})=n \log (\sum\limits_{t=1}^n \hat{\epsilon}_t^2)-2(\omega-1) \sum\limits_{t=1}^n \log(y_t).
+\mathcal{L}^{*}(\bm{\nu})=n \log \left(\sum\limits_{t=1}^n \hat{\epsilon}_t^2\right)-2(\omega-1) \sum\limits_{t=1}^n \log(y_t).
 \label{eqn:objective.reduce}
 \end{equation}
 
 In the R package \texttt{forecast} and my own implementation, the Nelder-Mead algorithm in the R base function \texttt{optim} is used to perform numerical optimization. Due to the size of dataset and speed of numerical optimization, a two-step method is employed to find estimates: with initial parameters, initial states are estimated using least squares methods; then with the estimated initial states, \texttt{optim} returns parameter estimates which minimizes the objective function \ref{eqn:objective.reduce}. 
 
-We can constrain the estimates to the forecastability region (\citet{hyndman2008admissible}), where the characteristic roots of $\textbf{D}$ lie within the unit circle to ensure that we place smaller weights on older data. In our implementation, we also constrain $0.8\leq \phi \leq 1$ and $0 \leq \omega \leq 1$ along with constraints of ARMA coefficients to ensure causality and invertibility. For the BATS model, the initial seasonal states for each seasonal component are constrained to sum to zero. 
+We can constrain the estimates to the forecastability region (\citet{hyndman2008admissible}), \vmcomment{Fix this reference}\vmadd{,} where the characteristic roots of $\textbf{D}$ lie within the unit circle to ensure that we place smaller weights on older data. In our implementation, we also constrain $0.8\leq \phi \leq 1$ and $0 \leq \omega \leq 1$ along with constraints of ARMA coefficients to ensure causality and invertibility. For the BATS model, the initial seasonal states for each seasonal component are constrained to sum to zero. 
 
 \subsection{Model Selection}
 \label{sec:selection}
@@ -306,12 +308,13 @@ For each dataset, we present parameter estimates of the fitted BATS and TBATS mo
 \subsection{Application to Weekly U.S. Gasoline Data}
 \hspace{4ex}Figure \ref{fig:data} (top) shows the number of barrels of motor gasoline product supplied in the United States, in thousands of barrels per day, from February 1991 to July 2005. The data shows an annual seasonal pattern with seasonal period $m_1=365.25/7 \approx 52.18$, and an upward trend. We used $n=484$ observations for training and $p=261$ observations for testing. For the gasoline data, a set of eight models (inclusion of non-trivial Box-Cox transformation, non-trivial damped trend, or ARMA components) were tried, and the model with minimum AIC was selected to be the final model.  For TBATS model, the harmonics selection procedure selected $k_1=9$. The final model is TBATS(0.6562,0.8035,0,0,\{365.25/7,9\}), and the estimates are shown in Table \ref{table:TBATS}. The trigonometric decomposition of the Gasoline time series is shown in Figure \ref{fig:tbatsDecompGas}. For BATS model, the seasonal period has to be rounded off to the nearest integer. The final model is BATS (1,1,1,0,52), and the estimates are shown in Table \ref{table:BATS}. The estimated value of $\beta$ is almost zero and the model selected has no damping effect, which suggests that there is little variation in growth rate. Since this is a small dataset, both TBATS and BATS models took about ten minutes to run, but BATS model has the disadvantage of have 52 initial states to be estimated and may therefore suffer from over-parameterization. Table \ref{table:number} summarizes the number of estimated parameters for each model.
 
-The reproduced estimates are different from ones in the paper but are the same as ones from the \texttt{forecast} package. The main difference lies the initialization and optimization method. I have consulted Prof.Hyndman, and he replied, ``Several differences occur because of the way initialization and optimization has been handled. I think the implementation in the forecast package is better." Figure \ref{fig:gasRMSE} shows the out-of-sample RMSE using BATS(1,1,1,0,52) and TBATS(0.6562,0.8035,0,0,\{365.25/7,9\}), where TBATS model has better forecasts than BATS model at all lead times. The out-of-sample forecasts presented in the report have large RMSE values at every lead time than ones presented in the paper for both TBATS and BATS model. Plugging in the paper estimates and the corresponding initial states into the likelihood function, we find BATS and TBATS models in the paper have negative likelihood 8485.34, 8433.85 and AIC 8605.34, 8479.85, respectively. Our fitted BATS and TBATS models have negative likelihood 8338.17, 8411.65 and AIC 8456.17, 8463.65, respectively. So our fitted models have larger likelihood than models in the paper, yet have poorer forecasts on the test set. 
+The reproduced estimates are different from ones in the paper but are the same as ones from the \texttt{forecast} package. The main difference lies the initialization and optimization method. I have consulted Prof.\ Hyndman, and he replied, ``Several differences occur because of the way initialization and optimization has been handled. I think the implementation in the forecast package is better." Figure \ref{fig:gasRMSE} shows the out-of-sample RMSE using BATS(1,1,1,0,52) and TBATS(0.6562,0.8035,0,0,\{365.25/7,9\}), where TBATS model has better forecasts than BATS model at all lead times. The out-of-sample forecasts presented in the report have large RMSE values at every lead time than ones presented in the paper for both TBATS and BATS model. Plugging in the paper estimates and the corresponding initial states into the likelihood function, we find BATS and TBATS models in the paper have negative likelihood 8485.34, 8433.85 and AIC 8605.34, 8479.85, respectively. Our fitted BATS and TBATS models have negative likelihood 8338.17, 8411.65 and AIC 8456.17, 8463.65, respectively. So our fitted models have larger likelihood than models in the paper, yet have poorer forecasts on the test set. 
 
 \begin{table}[]
 \small
 \centering
-\caption{Parameters chosen for each application of the TBATS model}
+\caption{Parameters chosen for each application of the TBATS model\vmadd{.} 
+\vmcomment{All captions should be as self contained as possible. What do you mean by ``chosen''? Do you mean estimated?}}
 \label{table:TBATS}
 \begin{tabular}{l l l l l l l l l l l l l l l l}
 \hline \hline
@@ -348,7 +351,7 @@ Electricity &  -0.1747 & 0.5105 & -0.2851&0.2467 & -0.1867 & 0.0624 & -0.4209   
 \begin{figure}[]
 \centering
   \includegraphics[width=6in,height=3in]{gasRMSE.pdf}
-  \caption{Out-of-sample results for the U.S. gasoline data using BATS(1,1,1,0,52) and TBATS(0.6562,0.8035,0,0,\{365.25/7,9\}).}
+  \caption{Out-of-sample \vmadd{prediction} results for the U.S. gasoline data using BATS(1,1,1,0,52) and TBATS(0.6562,0.8035,0,0,\{365.25/7,9\}).}
   \label{fig:gasRMSE}
 \end{figure}
 
@@ -371,7 +374,7 @@ The trigonometric decomposition of the call center data is shown in Figure \ref{
 \begin{figure}[]
 \centering
   \includegraphics[width=6in,height=3in]{callsRMSE.pdf}
-  \caption{Out-of-sample results for the call center data using BATS(1,NA,2,0,169,845) and TBATS(1,NA,2,2,\{169,6\},\{845,4\}).}
+  \caption{Out-of-sample \vmadd{prediction} results for the call center data using BATS(1,NA,2,0,169,845) and TBATS(1,NA,2,2,\{169,6\},\{845,4\}).}
   \label{fig:callsRMSE}
 \end{figure}
 
@@ -384,11 +387,13 @@ The trigonometric decomposition of the call center data is shown in Figure \ref{
 
 
 \subsection{Application to the Turkey Electricity Demand Data}
-\hspace{4ex}Figure \ref{fig:data} (bottom) shows 9 years of daily Turkey electricity demand series from January 1, 2000, to December 31, 2008. Three seasonal components exist with $m_1=7, m_2=354.37, m_3=365.25$. The electricity demand is affected by two Turkish religious holidays which are based on Hijri calendar with period 354.37, and national holidays which are based on Gregorian calendar with period 365.25. The exact dates of holidays are given in Table 3 of \citet{de2011forecasting}. The training set consists of first 6 years of data (2191 observations) and the test set consists of last three years of data (1096 observations). The models selected with minimum AIC are BATS(1,1,5,4,7,354,365) and TBATS(1,1,1,5,\{7,3\},\{354.37,5\},\{365.25,10\}).
+\hspace{4ex}Figure \ref{fig:data} (bottom) shows 9 years of daily Turkey electricity demand series from January 1, 2000, to December 31, 2008. Three seasonal components exist with $m_1=7$, $m_2=354.37$, \vmadd{and} $m_3=365.25$. The electricity demand is affected by two Turkish religious holidays which are based on Hijri calendar with period 354.37, and national holidays which are based on Gregorian calendar with period 365.25. The exact dates of holidays are given in Table 3 of \citet{de2011forecasting}. The training set consists of first 6 years of data (2191 observations) and the test set consists of last three years of data (1096 observations). The models selected with minimum AIC are BATS(1,1,5,4,7,354,365) and TBATS(1,1,1,5,\{7,3\},\{354.37,5\},\{365.25,10\}).
 
-Parameter estimates in Table \ref{table:TBATS} and \ref{table:BATS} suggest that Box-Cox transformation is not required for neither BATS or TBATS. The estimated value of $\beta$ is zero in the BATS model with $\phi=1$, which suggests constant growth rate. Forecasts evaluations are illustrated in Figure \ref{fig:tbatsDecompTelec}, where TBATS model performed better than BATS model in the beginning, but got worse as the lead time increased. This is different than the paper results, where TBATS model always performs better than BATS model.
+Parameter estimates in Table \ref{table:TBATS} and \ref{table:BATS} suggest that Box-Cox transformation is \vmdel{not} \vmcomment{double negation} required for neither BATS or TBATS. The estimated value of $\beta$ is zero in the BATS model with $\phi=1$\vmdel{, which} suggest\vmdel{s} \vmadd{a} constant growth rate. Forecasts evaluations are illustrated in Figure \ref{fig:tbatsDecompTelec}, where TBATS model performed better than BATS model in the beginning, but got worse as the lead time increased. This is different than the paper results, where TBATS model always performs better than BATS model.
 
-The trigonometric decomposition of the Turkey Electricity Demand Data is shown in Figure \ref{fig:tbatsDecompTelec}. The second panel shows an upward trend, and the fifth and sixth panels show the seasonal components based on Hijri calendar and Gregorian calendar, respectively. Hijri seasonal component is more stable than Gregorian seasonal component. Their combined effect is shown in the fourth panel, where Hijri and Gregorian seasonal components do not offset each other.
+The trigonometric decomposition of the Turkey Electricity Demand Data is shown in Figure \ref{fig:tbatsDecompTelec}. The second panel shows an upward trend, and the fifth and sixth panels show the seasonal components based on Hijri calendar and Gregorian calendar, respectively. 
+\vmadd{The} Hijri seasonal component is more stable than \vmadd{the} Gregorian seasonal component. 
+Their combined effect is shown in the fourth panel, where \vmadd{the} Hijri and Gregorian seasonal components do not offset each other.
 
 \begin{figure}[]
 \centering
